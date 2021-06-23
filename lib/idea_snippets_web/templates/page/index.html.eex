@@ -1,0 +1,48 @@
+<section class="phx-hero">
+  <%= if @current_user do %>
+  <h1><%= gettext "Welcome to %{name}!", name: @current_user.email %></h1>
+  <% else %>
+  <h1><%= gettext "Welcome to %{name}!", name: "Idea Snippets" %></h1>
+  <% end %>
+  <p>Idea Snippetsは、ちょっとしたElixirコードを書き留める SNS Webです。</p>
+</section>
+
+<section class="row">
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Code</th>
+      <th>Comments</th>
+      <th>Status</th>
+      <th>User_id</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for post <- @posts do %>
+    <tr>
+      <td><%= post.title %></td>
+      <td><%= post.description %></td>
+
+      <%= unless post.published == :limited do %>
+      <td><%= parse_markdown(post.code) |> raw %></td>
+      <% else %>
+        <%= if @current_user do %>
+          <td><%= parse_markdown(post.code) |> raw %></td>
+          <% else %>
+          <td></td>
+        <% end %>
+      <% end %>
+
+      <td><%= get_number_of_comments(post.id) %></td>
+      <td><%= post.published %></td>
+      <td><%= post.user_id %></td>
+      <td>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+</section>
